@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
 
 enum Type {
@@ -57,7 +56,7 @@ void piece_to_string(struct Piece piece, char *str){
 
 //Sets up the board
 void set_up_board() {
-    
+
     // White Colors
     for(int i = 0; i < 2; i++){
         for(int j = 0; j < 8 ; j++){
@@ -81,7 +80,7 @@ void set_up_board() {
     board[0][5].type = BISHOP;
     board[0][6].type = HORSE;
     board[0][7].type = CASTLE;
-    
+
     //Pawns
     for(int i = 0; i < 8; i++){
         board[1][i].type = PAWN;
@@ -97,7 +96,7 @@ void set_up_board() {
     board[7][5].type = BISHOP;
     board[7][6].type = HORSE;
     board[7][7].type = CASTLE;
-   
+
 
     //Empty pieces
     for(int i = 2; i < 6; i++){
@@ -125,7 +124,7 @@ void print_board() {
         }
         printf("\n\n");
     }
-    
+
 }
 
 void print_divider(){
@@ -195,16 +194,16 @@ void force_move(char *from, char *to){
 
     board[to_pos[0]][to_pos[1]].type =  board[from_pos[0]][from_pos[1]].type;
     board[to_pos[0]][to_pos[1]].color =  board[from_pos[0]][from_pos[1]].color;
-    
+
     board[from_pos[0]][from_pos[1]].type = NONE;
     board[from_pos[0]][from_pos[1]].color = NOCOLOR;
-    
+
 }
 
 
 
 int pawn_logic(int *from_pos, int *to_pos){
-    
+
     //White pawn logic
     if(board[from_pos[0]][from_pos[1]].color == WHITE){
 
@@ -214,9 +213,9 @@ int pawn_logic(int *from_pos, int *to_pos){
                 return 1;
             }
         }
-        
+
         //Pawn takes a piece to the right
-        
+
         if( (from_pos[0] + 1 == to_pos[0]) && (from_pos[1] + 1 == to_pos[1]) ){
             if(board[to_pos[0]][to_pos[1]].type != NONE){
                 return 1;
@@ -238,7 +237,7 @@ int pawn_logic(int *from_pos, int *to_pos){
                     return 1;
             }
         }
-         
+
         //Implement En passant here
         }
     }
@@ -252,7 +251,7 @@ int pawn_logic(int *from_pos, int *to_pos){
                 return 1;
             }
         }
-        
+
         //Pawn takes a piece to the right
         if( (from_pos[0] - 1 == to_pos[0]) && (from_pos[1] + 1 == to_pos[1]) ){
             if(board[to_pos[0]][to_pos[1]].type != NONE){
@@ -275,21 +274,21 @@ int pawn_logic(int *from_pos, int *to_pos){
                     return 1;
             }
         }
-         
+
         //Implement En passant here
         }
     }
 
 
     return 0;
-    
+
 }
 
 
 int rook_logic(int *from_pos, int *to_pos){
-    
+
     if(from_pos[0] == to_pos[0]){
-        
+
         int from = from_pos[1];
         int to = to_pos[1];
 
@@ -319,11 +318,11 @@ int rook_logic(int *from_pos, int *to_pos){
     }
 
     if(from_pos[1] == to_pos[1]){
-       
+
 
        int from = from_pos[0];
        int to = to_pos[0];
-       
+
         if(from < to){
             for(int i = from+1; i < 8; i++){
                 if(i == to){
@@ -351,7 +350,7 @@ int rook_logic(int *from_pos, int *to_pos){
 
     return 0;
 
-}   
+}
 
 
 
@@ -360,37 +359,37 @@ int horse_logic(int *from_pos, int *to_pos){
 
     // Moving 2 vertically
     if(from_pos[0] + 2 == to_pos[0] && from_pos[1] + 1 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
     if(from_pos[0] + 2 == to_pos[0] && from_pos[1] - 1 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
     if(from_pos[0] - 2 == to_pos[0] && from_pos[1] + 1 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
     if(from_pos[0] - 2 == to_pos[0] && from_pos[1] - 1 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
 
     // Moving 2 horizonatally
     if(from_pos[0] + 1 == to_pos[0] && from_pos[1] + 2 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
     if(from_pos[0] + 1 == to_pos[0] && from_pos[1] - 2 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
     if(from_pos[0] - 1 == to_pos[0] && from_pos[1] + 2 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
     if(from_pos[0] - 1 == to_pos[0] && from_pos[1] - 2 == to_pos[1]){
-        return 1;        
+        return 1;
     }
 
 
@@ -403,21 +402,21 @@ int horse_logic(int *from_pos, int *to_pos){
 int bishop_logic(int *from_pos, int *to_pos){
 
 
-    // Seperate the 4 directions the bishop can go 
+    // Seperate the 4 directions the bishop can go
 
     if(from_pos[0] < to_pos[0] && from_pos[1] < to_pos[1]){
 
-    
+
         int move_direction = (from_pos[0] > from_pos[1]) ? from_pos[0] : from_pos[1];
 
-                    
+
 
         for(int i  = 1; i < 8 - move_direction; i++){
 
             int direction_x = from_pos[0] + i;
             int direction_y = from_pos[1] + i;
-            
-            
+
+
 
             if( (direction_x == to_pos[0]) && (direction_y == to_pos[1]) ){
                 return 1;
@@ -427,7 +426,7 @@ int bishop_logic(int *from_pos, int *to_pos){
                 return 0;
             }
 
-        
+
         }
     }
 
@@ -440,8 +439,8 @@ int bishop_logic(int *from_pos, int *to_pos){
 
             int direction_x = from_pos[0] + i;
             int direction_y = from_pos[1] - i;
-            
-            
+
+
 
             if( (direction_x == to_pos[0]) && (direction_y == to_pos[1]) ){
                 return 1;
@@ -450,12 +449,12 @@ int bishop_logic(int *from_pos, int *to_pos){
             if(board[direction_x][direction_y].type != NONE){
                 return 0;
             }
-        
+
         }
 
 
     }
-    
+
 
 
     if(from_pos[0] > to_pos[0] && from_pos[1] < to_pos[1]){
@@ -466,8 +465,8 @@ int bishop_logic(int *from_pos, int *to_pos){
 
             int direction_x = from_pos[0] + i;
             int direction_y = from_pos[1] - i;
-            
-            
+
+
 
             if( (direction_x == to_pos[0]) && (direction_y == to_pos[1]) ){
                 return 1;
@@ -476,23 +475,23 @@ int bishop_logic(int *from_pos, int *to_pos){
             if(board[direction_x][direction_y].type != NONE){
                 return 0;
             }
-        
+
         }
 
 
     }
-    
+
 
     if(from_pos[0] > to_pos[0] && from_pos[1] > to_pos[1]){
-        
+
         int move_direction = (from_pos[0] < from_pos[1]) ? from_pos[0] : from_pos[1];
-            
+
 
         for(int i  = 1; i < move_direction+1; i++){
 
             int direction_x = from_pos[0] - i;
             int direction_y = from_pos[1] - i;
-                    
+
 
             if( (direction_x == to_pos[0]) && (direction_y == to_pos[1]) ){
                 return 1;
@@ -502,12 +501,12 @@ int bishop_logic(int *from_pos, int *to_pos){
                 return 0;
             }
 
-        
+
         }
 
 
     }
-    
+
 
     return 0;
 }
@@ -562,12 +561,12 @@ void move(char *from, char *to){
 
     int* from_pos = chess_notation_decoder(from);
     int* to_pos = chess_notation_decoder(to);
-    
+
     if(is_move_legal(from_pos, to_pos)){
-        
+
         board[to_pos[0]][to_pos[1]].type =  board[from_pos[0]][from_pos[1]].type;
         board[to_pos[0]][to_pos[1]].color =  board[from_pos[0]][from_pos[1]].color;
-    
+
         board[from_pos[0]][from_pos[1]].type = NONE;
         board[from_pos[0]][from_pos[1]].color = NOCOLOR;
 
@@ -586,7 +585,7 @@ void game_loop(){
     print_board();
 
     char *from_str = (char*)malloc(2 * sizeof(char));
-    char *to_str = (char*)malloc(2 * sizeof(char)); 
+    char *to_str = (char*)malloc(2 * sizeof(char));
 
     while(1){
         print_divider();
@@ -616,7 +615,7 @@ void game_loop(){
 
 
 
-int main() {   
+int main() {
 
     game_loop();
 
