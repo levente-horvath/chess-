@@ -1,1 +1,1 @@
-it's just in c, no gui
+it's just chess in c, no gui
